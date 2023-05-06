@@ -16,6 +16,7 @@
             android:id="@+id/movieImageItemPage"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:padding="10dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout

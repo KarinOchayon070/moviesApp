@@ -51,6 +51,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         this.movieList.addAll(movies);
     }
 
+    public void clearMovies(){
+        this.movieList.clear();
+    }
+
     public class MovieHolder extends RecyclerView.ViewHolder{
         ImageView movieImageItemPage;
         TextView movieNameItemPage , movieDateItemPage , movieIdItemPage;

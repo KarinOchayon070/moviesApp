@@ -6,7 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.AbsListView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -24,11 +32,55 @@ public class MainActivity extends AppCompatActivity {
     private MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this);
     private RecyclerView recyclerview;
     private String page = "1";
+    private String year = "year.decr";
+    private String genre = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Switch switchOrder = findViewById(R.id.switchOrder);
+        switchOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                page = "1";
+
+                if (isChecked) {
+                    year = "year.incr";
+                } else {
+                    year = "year.decr";
+                }
+                movieAdapter.clearMovies();
+                fetchMovies();
+            }
+        });
+
+        EditText editTextGenre = findViewById(R.id.editTextTSearch);
+
+        editTextGenre.addTextChangedListener(new TextWatcher() {
+            @Override
+
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // called before the text is changed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // called as the text is changed
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                    genre = editTextGenre.getText().toString();
+                    page = "1";
+                    movieAdapter.clearMovies();
+                    fetchMovies();
+            }
+        });
+
+
+
 
         recyclerview = findViewById(R.id.recyclerViewItemPage);
         recyclerview.setHasFixedSize(true);
@@ -57,9 +109,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void fetchMovies(){
+        String url = "https://moviesdatabase.p.rapidapi.com/titles";
+        url += "?sort=" + this.year;
+        url += "&page=" + this.page;
+        if(!this.genre.isEmpty()){
+            url += "&genre=" + this.genre;
+        }
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://moviesdatabase.p.rapidapi.com/titles?sort=year.decr&page=" + this.page)
+                .url(url)
                 .get()
                 .addHeader("X-RapidAPI-Key", "1e5c2595e5mshc18e0b33083353ap195da8jsn6d7b91d03321")
                 .addHeader("X-RapidAPI-Host", "moviesdatabase.p.rapidapi.com")
@@ -76,8 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 // Parse the JSON response and update the adapter with the movie data
                 String responseBody = response.body().string();
                 List<Movie> movieList = parseMovieData(responseBody);
-                movieAdapter.addMovies(movieList);
-                runOnUiThread(() -> recyclerview.setAdapter(movieAdapter));
+                if(movieList.isEmpty()){
+                    Log.d("Shtok", "I GOT A BIT DICK");
+                }
+                else{
+                    movieAdapter.addMovies(movieList);
+                    runOnUiThread(() -> recyclerview.setAdapter(movieAdapter));
+                }
             }
         });
 

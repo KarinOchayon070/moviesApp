@@ -55,7 +55,10 @@ public class Movie {
     }
 
     public int getReleaseYear(){
-        return this.releaseYear.year;
+        if(this.releaseYear != null){
+            return this.releaseYear.year;
+        }
+        return -1;
     }
 
     public String getImage(){

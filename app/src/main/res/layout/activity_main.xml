@@ -4,7 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <EditText
+            android:id="@+id/editTextTSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Search for a specific movie..."
+            android:inputType="textPersonName" />
+
+        <Switch
+            android:id="@+id/switchOrder"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:minHeight="32dp"
+            android:text="Switch"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewItemPage"
