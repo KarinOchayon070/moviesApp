@@ -1,46 +1,68 @@
 package com.example.moviesapp;
 
+import android.net.Uri;
+
 public class Movie {
+        private String id;
+        private PrimaryImage primaryImage;
+        private TitleType titleType;
+        private TitleText titleText;
+        private ReleaseYear releaseYear;
+        private ReleaseDate releaseDate;
 
-    private String title, overview;
-    private Double rating;
 
-    public Movie(String title, String overview, Double rating){
-        this.title = title;
-//        this.poster = poster;
-        this.overview = overview;
-        this.rating = rating;
+    public static class PrimaryImage {
+        public String id;
+        public int width;
+        public int height;
+        public String url;
+        public Caption caption;
     }
 
-    public String getTitle() {
-        return title;
+    public static class Caption {
+        public String plainText;
+        public String __typename;
     }
 
-//    public String getPoster() {
-//        return poster;
-//    }
-
-    public String getOverview() {
-        return overview;
+    public static class TitleType {
+        public String text;
+        public String id;
+        public boolean isSeries;
+        public boolean isEpisode;
     }
 
-    public Double getRating() {
-        return rating;
+    public static class TitleText {
+        public String text;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public static class ReleaseYear {
+        public int year;
+        public Integer endYear;
     }
 
-//    public void setPoster(String poster) {
-//        this.poster = poster;
-//    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
+    public static class ReleaseDate {
+        public Integer day;
+        public Integer month;
+        public int year;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public String getId(){
+        return this.id;
     }
+
+    public String getTitle(){
+        return this.titleText.text;
+    }
+
+    public int getReleaseYear(){
+        return this.releaseYear.year;
+    }
+
+    public String getImage(){
+        if(this.primaryImage != null){
+            return this.primaryImage.url;
+        }
+        return null;
+    }
+
 }

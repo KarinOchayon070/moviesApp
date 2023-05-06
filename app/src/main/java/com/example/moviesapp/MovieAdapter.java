@@ -1,7 +1,6 @@
 package com.example.moviesapp;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
 
     private Context context;
-    private List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
 
-    public MovieAdapter(Context context, List<Movie> movieList) {
+    public MovieAdapter(Context context) {
         this.context = context;
-        this.movieList = movieList;
     }
-
 
 
     @NonNull
@@ -38,35 +35,32 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     @Override
     public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
-        Movie movie = movieList.get(position);
+        Movie movie = this.movieList.get(position);
+        Glide.with(context).load(movie.getImage()).error(R.drawable.ic_baseline_heart_broken_24).into(holder.movieImageItemPage);
         holder.movieNameItemPage.setText(movie.getTitle());
-        holder.movieRatingItemPage.setText(movie.getRating().toString());
-        holder.movieOverviewItemPage.setText(movie.getOverview());
-
-        Log.d("tag" , movie.getTitle() + movie.getRating().toString() + movie.getOverview());
-
-
+        holder.movieDateItemPage.setText(String.valueOf(movie.getReleaseYear()));
+        holder.movieIdItemPage.setText(movie.getId());
     }
 
     @Override
     public int getItemCount() {
-        int size = movieList.size();
-        Log.d("size", "the value" + size);
-        return movieList.size();
+        return this.movieList.size();
+    }
+
+    public void addMovies(List<Movie> movies){
+        this.movieList.addAll(movies);
     }
 
     public class MovieHolder extends RecyclerView.ViewHolder{
-
         ImageView movieImageItemPage;
-        TextView movieNameItemPage , movieRatingItemPage , movieOverviewItemPage;
+        TextView movieNameItemPage , movieDateItemPage , movieIdItemPage;
 
         public MovieHolder(@NonNull View itemView) {
             super(itemView);
-
-//            movieImageItemPage = itemView.findViewById(R.id.movieImageItemPage);
+            movieImageItemPage = itemView.findViewById(R.id.movieImageItemPage);
             movieNameItemPage = itemView.findViewById(R.id.movieNameItemPage);
-            movieRatingItemPage = itemView.findViewById(R.id.movieRatingItemPage);
-            movieOverviewItemPage = itemView.findViewById(R.id.movieOverviewItemPage);
+            movieDateItemPage = itemView.findViewById(R.id.movieDateItemPage);
+            movieIdItemPage = itemView.findViewById(R.id.movieIdItemPage);
 
         }
     }

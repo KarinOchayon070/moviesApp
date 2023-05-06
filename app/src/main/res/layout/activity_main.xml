@@ -7,10 +7,9 @@
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/recyclerViewItemPage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F44336">
+        android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
