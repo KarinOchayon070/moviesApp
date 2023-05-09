@@ -45,8 +45,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         holder.movieNameItemPage.setText(movie.getTitle());
         holder.movieDateItemPage.setText(String.valueOf(movie.getReleaseYear()));
         holder.movieIdItemPage.setText(movie.getId());
-
-
     }
 
     @Override
