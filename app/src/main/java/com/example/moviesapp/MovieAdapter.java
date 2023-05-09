@@ -76,6 +76,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
                 public void onClick(View view) {
                     if(recyclerViewInterface != null){
                         int position = getAdapterPosition();
+                        // Checking if the position is valid
                         if(position != RecyclerView.NO_POSITION){
                             recyclerViewInterface.onItemClick(position);
                         }

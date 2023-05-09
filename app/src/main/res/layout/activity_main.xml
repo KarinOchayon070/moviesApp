@@ -17,14 +17,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Search for a specific movie..."
+            android:hint="Enter Genre..."
             android:inputType="textPersonName" />
 
         <Switch
             android:id="@+id/switchOrder"
             android:layout_width="200dp"
             android:layout_height="55dp"
-            android:layout_gravity="right"
+            android:layout_gravity="right|top"
             android:layout_weight="1"
             android:gravity="right"
             android:minHeight="32dp"
