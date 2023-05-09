@@ -12,16 +12,25 @@
         android:id="@+id/movieNameItemDescriptionPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:padding="10dp"
         android:text="Movie Name"
         android:textSize="22dp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/movieIdItemDescriptionPage"
+        android:id="@+id/movieReleaseYearItemDescriptionPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:padding="10dp"
-        android:text="Movie ID" />
+        android:text="Movie Release Year" />
+
+    <ImageView
+        android:id="@+id/movieImageItemDescriptionPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

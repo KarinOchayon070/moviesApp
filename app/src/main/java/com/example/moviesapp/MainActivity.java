@@ -88,12 +88,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
             }
         });
 
-        // This is the default - identifying the recyclerView and
+        // This is the default - identifying the recyclerView and fetch the movies from the API
         recyclerview = findViewById(R.id.recyclerViewItemPage);
         recyclerview.setHasFixedSize(true);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         fetchMovies();
 
+        // It is important to understand when the user has scrolled all the way down so that we can bring
+        // more movies (another call to the API)
         recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -113,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
         });
     }
 
-
-
+    // The actual call to the API
     private void fetchMovies(){
         String url = "https://moviesdatabase.p.rapidapi.com/titles";
         url += "?sort=" + this.year;
@@ -134,9 +135,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                // Handle the failure
+                // Display a Toast message to indicate the failure
+                Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 // Parse the JSON response and update the adapter with the movie data
@@ -147,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
                 }
                 else{
                     movieAdapter.addMovies(movieList);
+                    // Runs the specified code on the UI thread.
+                    // This is necessary because UI-related code must be executed on the UI thread in Android to avoid
+                    // like race conditions and ANRs (Application Not Responding errors).
+                    // This means that the recyclerview will display the movies contained in the movieAdapter.
                     runOnUiThread(() -> recyclerview.setAdapter(movieAdapter));
                 }
             }
@@ -154,19 +159,26 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
 
     }
 
+
+    // Parsing the response data from an API that provides movie information
     private List<Movie> parseMovieData(String responseBody) {
         Gson gson = new Gson();
         MovieApiResponse response = gson.fromJson(responseBody, MovieApiResponse.class);
+        // VERY IMPORTANT! Increments the page by 1 to = the next page of data (in the API) should be fetched next time
         this.page = String.valueOf(Integer.parseInt(response.getPage()) + 1);
         return response.getMovies();
     }
 
+
+    // This method is called when the user clicks on an item in a list
+    // When the method is called, it creates a new Intent object, which is used to start a new activity in the app.
+    // The new activity is specified using the ItemDescription.class argument in the Intent constructor.
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, ItemDescription.class);
-        intent.putExtra("name", movieList.get(position).getTitle());
-        intent.putExtra("image", movieList.get(position).getImage());
-        intent.putExtra("releaseYear", movieList.get(position).getReleaseYear());
+        intent.putExtra("movieName", movieList.get(position).getTitle());
+        intent.putExtra("movieImage", movieList.get(position).getImage());
+        intent.putExtra("movieReleaseYear", movieList.get(position).getReleaseYear());
         startActivity(intent);
     }
 }
