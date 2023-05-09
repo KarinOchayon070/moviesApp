@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
     private MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this, this);
     private  List<Movie> movieList = new ArrayList<>();
     private RecyclerView recyclerview;
+
+    // This is the variables the i transfer to the request line
     private String page = "1";
     private String year = "year.decr";
     private String genre = "";
@@ -42,38 +44,43 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // The "switch button" is used to change the order of the year the movies were released.
+        // By default, the movies are arranged from newest to oldest.
+        // When the switch is pressed for the first time, the movies will be sorted from oldest to newest.
+
         Switch switchOrder = findViewById(R.id.switchOrder);
         switchOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                // Show movies starting page 1 of the API
                 page = "1";
-
                 if (isChecked) {
                     year = "year.incr";
                 } else {
                     year = "year.decr";
                 }
+                // Clean all the movies currently in the array and bring them again
                 movieAdapter.clearMovies();
                 fetchMovies();
             }
         });
 
-        EditText editTextGenre = findViewById(R.id.editTextTSearch);
 
+        // When we want to receive movies from a certain genre
+
+        EditText editTextGenre = findViewById(R.id.editTextTSearch);
         editTextGenre.addTextChangedListener(new TextWatcher() {
             @Override
-
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // called before the text is changed
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // called as the text is changed
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
+                // Again - Show movies starting page 1 of the API, clean all the movies currently in the array and bring them again
                     genre = editTextGenre.getText().toString();
                     page = "1";
                     movieAdapter.clearMovies();
@@ -81,9 +88,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
             }
         });
 
-
-
-
+        // This is the default - identifying the recyclerView and
         recyclerview = findViewById(R.id.recyclerViewItemPage);
         recyclerview.setHasFixedSize(true);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -159,7 +164,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, ItemDescription.class);
-        intent.putExtra("Name", movieList.get(position).getTitle());
+        intent.putExtra("name", movieList.get(position).getTitle());
+        intent.putExtra("image", movieList.get(position).getImage());
+        intent.putExtra("releaseYear", movieList.get(position).getReleaseYear());
         startActivity(intent);
     }
 }
