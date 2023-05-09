@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,8 +29,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
-    private MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this);
+public class MainActivity extends AppCompatActivity implements RecyclerViewInterface {
+    private MovieAdapter movieAdapter = new MovieAdapter(MainActivity.this, this);
+    private  List<Movie> movieList = new ArrayList<>();
     private RecyclerView recyclerview;
     private String page = "1";
     private String year = "year.decr";
@@ -134,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 // Parse the JSON response and update the adapter with the movie data
                 String responseBody = response.body().string();
-                List<Movie> movieList = parseMovieData(responseBody);
+                movieList = parseMovieData(responseBody);
                 if(movieList.isEmpty()){
-                    Log.d("Shtok", "I GOT A BIT DICK");
+                    Log.d("LogEmpty", "Movie list is empty");
                 }
                 else{
                     movieAdapter.addMovies(movieList);
@@ -154,4 +156,10 @@ public class MainActivity extends AppCompatActivity {
         return response.getMovies();
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(MainActivity.this, ItemDescription.class);
+        intent.putExtra("Name", movieList.get(position).getTitle());
+        startActivity(intent);
+    }
 }
